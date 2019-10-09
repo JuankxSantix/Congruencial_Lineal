@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:Congruencia_lineal_AplicacionDeEscritorio"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="900">
+        Title="Congruencial Lineal" Height="550" Width="900">
     <Window.Background>
-        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0" Opacity="0.7">
             <GradientStop Color="#FF4F658B"/>
             <GradientStop Color="#FF149365" Offset="1"/>
             <GradientStop Color="#FF5A5776" Offset="0.281"/>
@@ -88,11 +88,14 @@
                         </TextBox.Background>
                     </TextBox>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,10">
+                <StackPanel Orientation="Horizontal" Margin="0,10" >
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="6" HorizontalAlignment="Center">
-                        <Button Height="30" Width="100" Margin="15,5" x:Name="btnCalcular" Click="BtnCalcular_Click" Panel.ZIndex="-1">Calcular</Button>
-                        <Button Height="30" Width="100" Margin="15,5" x:Name="btnBorrar" Click="BtnBorrar_Click">Nuevo</Button>
-                        <Button Height="30" Width="100" Margin="15,5" x:Name="btnGraficar" Click="BtnGraficar_Click">Graficar</Button>
+                        <Button Height="30" Width="70" Margin="5,5" x:Name="btnCalcular" Click="BtnCalcular_Click" Panel.ZIndex="-1">Calcular</Button>
+                        <Button Height="30" Width="70" Margin="5,5" x:Name="btnNuevo" Click="BtnNuevo_Click">Nuevo</Button>
+                        <Button Height="30" Width="70" Margin="5,5" x:Name="btnBorrar" Click="BtnBorrar_Click">Borrar</Button>
+                        <Button Height="30" Width="70" Margin="5,5" x:Name="btnGraficar" Click="BtnGraficar_Click">Graficar</Button>
+                        <Button Height="30" Width="70" Margin="5,5" x:Name="btnexportar" Click="Btnexportar_Click">Exportar</Button>
+                        
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
+using System.Xml.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -43,6 +45,10 @@ namespace Congruencia_lineal_AplicacionDeEscritorio
             txtNIteraciones.Clear();
             CClompletoRadiobutton.IsChecked = false;
             DIteracionesRadiobutton.IsChecked = false;
+            modelfx = new PlotModel();
+            modelfx.InvalidatePlot(true);
+            chartfx2.Model = modelfx;
+
         }
          void Editable(bool X)
         {
@@ -54,12 +60,17 @@ namespace Congruencia_lineal_AplicacionDeEscritorio
             btnCalcular.IsEnabled = X;
             btnGraficar.IsEnabled = X;
             StkRadios.IsEnabled = X;
+            btnexportar.IsEnabled = X;
+            btnBorrar.IsEnabled = X;
+            btnNuevo.IsEnabled = !X;
         }
 
         private void BtnBorrar_Click(object sender, RoutedEventArgs e)
         {
+
             Borrar();
-            Editable(true);
+            Editable(false);
+            //btnNuevo.IsEnabled = true;
 
         }
 
@@ -169,11 +180,14 @@ namespace Congruencia_lineal_AplicacionDeEscritorio
                 MessageBox.Show("Faltan datos por llenar", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+            btnGraficar.IsEnabled = true;
+
         }
 
         private void BtnGraficar_Click(object sender, RoutedEventArgs e)
         {
             graficarL();
+            btnexportar.IsEnabled = true;
         }
 
         private void graficarL()
@@ -198,10 +212,9 @@ namespace Congruencia_lineal_AplicacionDeEscritorio
                     incremento = int.Parse(txtIncremento.Text);
                     int numero;
                     numero = int.Parse(txtSemilla.Text);
-                    
+
                     for (int i = 1; i <= NDeIteraciones; i++)
                     {
-
                         int Xi = (multiplicador * numero + incremento);
                         double residuo;
                         residuo = Xi % modulo;
@@ -212,13 +225,13 @@ namespace Congruencia_lineal_AplicacionDeEscritorio
                     foreach (var punto in resultado)
                     {
                         Algorit.Points.Add(new DataPoint(punto.X, punto.Y));
-                        Algorit.MarkerType = MarkerType.Star;
-                        Algorit.Color = OxyColors.Red;
+                        Algorit.LineStyle = LineStyle.None;
+                        Algorit.MarkerType = MarkerType.Circle;
                         Algorit.MarkerStroke = OxyColors.Red;
                     }
 
-                    Algorit.Color = OxyColors.DarkRed;
-                    Algorit.Title = "Puntos";
+                    //Algorit.Color = OxyColors.Automatic;
+                    //Algorit.Title = "Puntos";
                     modelfx.Series.Add(Algorit);
 
                     chartfx2.Model = modelfx;
@@ -251,6 +264,53 @@ namespace Congruencia_lineal_AplicacionDeEscritorio
         {
             txtNIteraciones.IsEnabled = true;
             NumDeIteraciones = true;
+        }
+
+        private void Btnexportar_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                double modulo = double.Parse(txtMoulo.Text);
+                int multiplicador = int.Parse(txtCMultiplicativa.Text);
+                int incremento = int.Parse(txtIncremento.Text);
+                int numero = int.Parse(txtSemilla.Text);
+
+                StringBuilder csvcontent = new StringBuilder();
+
+                string cadena = "";
+
+                for (int i = 1; i <= NDeIteraciones; i++)
+                {
+                    int Xi = (multiplicador * numero + incremento);
+                    double residuo;
+                    residuo = Xi % modulo;
+                    numero = int.Parse(residuo.ToString());
+                    double NAleatorio;
+                    NAleatorio = numero / (modulo - 1);
+                    cadena += string.Format("{0},", NAleatorio.ToString());
+                    //csvcontent.AppendLine(string.Format("{0},", NAleatorio.ToString()));
+                }
+                csvcontent.AppendLine(cadena);
+
+                string destino = "C:\\Users\\Juan carlos\\Desktop\\NumAleatoriosCLineal.csv";
+                File.AppendAllText(destino, csvcontent.ToString());
+
+                MessageBox.Show("Los datos se exportaron satisfactoriamente.\nEl documento tiene el nombre de ''NumAleatoriosCLineal''\nSe encuentra ubicado en el escritorio", "Exportar Datos", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(""+ex.Message,"Error al exportar",MessageBoxButton.OK,MessageBoxImage.Exclamation,MessageBoxOptions.RtlReading);
+            }
+            
+            
+        }
+
+        private void BtnNuevo_Click(object sender, RoutedEventArgs e)
+        {
+            Borrar();
+            Editable(true);
+            btnGraficar.IsEnabled = false;
+            btnexportar.IsEnabled = false;
         }
     }
 }
